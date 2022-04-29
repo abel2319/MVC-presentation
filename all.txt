@@ -1,0 +1,102 @@
+	INTROUCTION
+Nous avons en fait reprOduit le même raisonnement que de nombreux développeurs avant nous. En fait, il y a des problèmes en programmation qui reviennent tellement souvent qu'on a créé toute une série de bonnes pratiques que l'on a réunies sous le nom de design patterns.
+Un des plus célèbres design patterns s'appelle MVC, qui signifie Modèle - Vue - Contrôleur. C'est celui que nous allons découvrir maintenant.
+Le pattern MVC permet de bien organiser son code source. Il va vous aider à savoir quels fichiers créer, mais surtout à définir leur rôle. Le but de MVC est justement de séparer la logique du code en trois parties que l'on retrouve dans des fichiers distincts.
+
+
+MVC
+
+Historique
+Le motif MVC a été créé par Trygve Reenskaug lors de sa visite du Palo Alto Research Center (abr. PARC) en 1978. Le nom original est thing model view editor pattern, puis il a été rapidement renommé model-view-controller pattern1. Le patron MVC a été utilisé la première fois pour créer des interfaces graphiques avec le langage de programmation Smalltalk en 1980.
+
+DESCRIPTON
+
+    Modèle : cette partie gère les données de votre site. Son rôle est d'aller récupérer les informations « brutes » dans la base de données, de les organiser et de les assembler pour qu'elles puissent ensuite être traitées par le contrôleur. On y trouve donc entre autres les requêtes SQL.
+
+    Vue : cette partie se concentre sur l'affichage. Elle ne fait presque aucun calcul et se contente de récupérer des variables pour savoir ce qu'elle doit afficher. On y trouve essentiellement du code HTML mais aussi quelques boucles et conditions PHP très simples, pour afficher par exemple une liste de messages.
+
+    Contrôleur : cette partie gère la logique du code qui prend des décisions. C'est en quelque sorte l'intermédiaire entre le modèle et la vue : le contrôleur va demander au modèle les données, les analyser, prendre des décisions et renvoyer le texte à afficher à la vue. Le contrôleur contient exclusivement du PHP. C'est notamment lui qui détermine si le visiteur a le droit de voir la page ou non (gestion des droits d'accès).
+    
+FONCTIONNEMENT
+
+Le Contrôleur - Controller
+
+Contrôleur - Controller
+
+Le Contrôleur est le point d'entrée de la demande de l'utilisateur. Cette demande est identifiée par une requête HTTP ou une URL, avec ou sans paramètre envoyé en méthode GET ou POST. Il existe d'autres méthodes telles que PUT, DELETE... mais qui ne sont pas encore reconnues par certains navigateurs. C'est la raison pour laquelle les méthodes GET et POST sont les plus pratiquées par les frameworks.
+
+Le Contrôleur est la couche centrale entre le Modèle et la Vue. Son rôle consiste à coordonner les tâches à exécuter, et à gérer les erreurs. Ces dernières peuvent apparaître lors d'un contrôle de paramètres ou de l'exécution d'un traitement par le Modèle. Le Contrôleur est en fait responsable du bon déroulement de la requête de l'utilisateur, de sa réception au renvoi de la réponse à l'utilisateur.
+
+Comme le nom « Contrôleur » l'indique, sa tâche principale est de contrôler, comprenant la gestion et la synchronisation des événements. Cela consiste à :
+
+    réceptionner la requête de l'utilisateur ;
+    effectuer un contrôle préliminaire des paramètres de la requête avant de les utiliser dans un traitement ;
+    définir l'action à entreprendre selon la méthode appelé : GET , POST, PUT, etc. ;
+    exécuter le traitement indiqué par la méthode ;
+    récupérer le résultat du traitement ;
+    gérer les erreurs si elles existent ;
+    communiquer le résultat du traitement à la Vue afin qu'elle le formate ;
+    récupérer les données formatées par la Vue ;
+    renvoyer ces données à l'utilisateur.
+
+Il faut bien comprendre que le Contrôleur ignore tout de la partie métier, et ne doit contenir aucun code métier. Il appelle les composants métiers appartement à la couche Modèle pour effectuer le traitement demandé, puis récupère le résultat ou une erreur, et enfin l'envoie à la Vue. C'est tout ce que le Contrôleur doit faire.
+Le Modèle - Model
+
+Les actions du modèle - Model
+
+Le modèle correspond à la logique métier et utilise des composants dits métiers. Le Modèle désigne le traitement à exécuter demandé par l'utilisateur. Il est appelé par le Contrôleur après que les paramètres de la requête aient été une première fois vérifiés. Ces derniers sont des données d'entrée nécessaires à la bonne exécution du processus métier.
+
+Afin de rendre les composants métiers plus sécurisés et stables, il est souhaitable d'insérer un traitement de contrôle plus approfondi sur les paramètres d'entrée. Bien que cela soit une action qui peut paraître redondante par rapport à celle déjà effectuée par le Contrôleur, cela n'est pas le cas. En effet, le Contrôleur ne vérifie les données qu'en surface, à savoir les données obligatoires, leur type et leur format. Tandis que le Modèle se doit être plus exigeant. Chaque composant métier doit inclure le même contrôle que celui du Contrôleur, mais en plus il doit s'assurer de la validité des données par rapport à la règle de gestion attendue.
+
+Des écritures en base de données et des extractions de données sont fréquentes. Ces actions sont considérées comme technique car détachées du fonctionnel métier, et sont par conséquent industrialisable. Ainsi, le modèle pourra se diviser en une autre couche dédiée aux accès à la base de données, en lecture et en écriture.
+
+Lorsque le traitement est terminé, le résultat est retourné au Contrôleur afin que ce dernier puisse le communiquer à la Vue.
+
+Voici un exemple d'actions que peut effectuer le Modèle :
+
+    contrôler les paramètres d'entrée : les données requises, le format des données ;
+    mettre fin au processus du modèle si un paramètre n'est pas valide. Générer une exception ou retourner un code d'erreur ;
+    vérifier la cohérences des données par rapport à la règle de gestion, et terminer le traitement en cas d'erreur ;
+    débuter la transaction en vue d'une série d'écritures/lectures en base de données ;
+    traiter la requête de l'utilisateur avec lecture et/ou écriture en base de données selon les besoins fonctionnels ;
+    stopper le traitement en cas d'erreur inattendue. Par exemple lancer une exception afin d'annuler la transaction par la suite ;
+    valider ou annuler la transaction en fonction du résultat du traitement ;
+    retourner le résultat du traitement au Contrôleur.
+
+Le rôle du Modèle consiste à traiter l'information reçue. Après le traitement, il peut envoyer ou non un résultat, ou indiquer qu'une erreur est apparue au cours de son exécution. C'est le seul contrat que le Modèle doit honorer avec son appelant : le Contrôleur ou autre (test unitaire).
+La Vue - View
+
+Vue - View
+
+La Vue est la partie visible de l'iceberg. Son rôle est d'afficher les données résultant du traitement du Modèle. La Vue récupère ces informations depuis le Contrôleur, formate les données si besoin puis construit la présentation avant de la renvoyer au Controller. Cette présentation, ou la réponse à la requête doit être sous le format de données attendu par l'utilisateur (client). Par exemple :
+
+    le format HTML à destination des navigateurs ;
+    le format XML, JSON ou données sérialisées, destiné à être (re)manipulé par d'autres processus ;
+    le format CSV pour lire les informations depuis un tableur ;
+    etc.
+
+Tout comme le Modèle, la Vue a aussi un engagement envers le Contrôleur. La Vue reçoit des données brutes du Contrôleur. Ces données sont manipulées dans le but d'obtenir une réponse formatée attendue par le client.
+
+Le Contrôleur récupère cette réponse. Il ne se soucis guère du format ou de ce qu'elle peut bien contenir. Le Contrôleur se contente tout simplement de renvoyer le résultat de la Vue à l'utilisateur.
+Conclusion
+
+L'architecture MVC offre un cadre normalisé pour le développement, une bonne pratique devenue une philosophie pour bien structurer une application, séparer les problématiques, optimiser la coordination et la communication entre les différents corps de métier (concepteur, développeur, DBA, intégrateur...).
+
+Des frameworks (cadres de travail) s'inspirant du MVC sont apparus, industrialisant tout ce qui est possible d'automatiser, c'est-à-dire les parties techniques redondantes, telles que :
+
+    le contrôle des paramètres d'entrée : vérification des données requises et de leur format ;
+    la connexion et l'accès à la base de données : transaction, lecture et écriture ;
+    la gestion du cache : création de fichiers ou mise en mémoire avec gestion du temps d'expiration ;
+    la communication avec d'autres applications à l'aide des web services : réception et envoi de données sous différents format (XML, JSON, CSV, HTML...) ;
+    le modèle de traitement du Contrôleur...
+
+Ainsi, grâce au design pattern Model-View-Controller, les développeurs ne se soucient plus de la technique. Ils ne se concentrent que sur les aspects fonctionnels du métier, du développement des composants métiers et de la conception de la base de données.
+
+Le MVC ne prétend pas être la solution à tous les problèmes, mais montre une voie sur la façon dont ces 
+
+
+AVANTAGE
+
+Un avantage apporté par ce modèle est la clarté de l'architecture qu'il impose. Cela simplifie la tâche du développeur qui tenterait d'effectuer une maintenance ou une amélioration sur le projet. En effet, la modification des traitements ne change en rien la vue. Par exemple on peut passer d'une base de données de type SQL à XML en changeant simplement les traitements d'interaction avec la base, et les vues ne s'en trouvent pas affectées.
+
+Le MVC montre ses limites dans le cadre des applications utilisant les technologies du web, bâties à partir de serveurs d'applications. Des couches supplémentaires sont alors introduites ainsi que les mécanismes d'inversion de contrôle et d'injection de dépendances8.

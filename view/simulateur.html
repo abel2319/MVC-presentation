@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Simulator</title>
+        <link rel="stylesheet" type="text/css" href="simulateur.css">
+        <script type="text/javascript" src="../controler/simulateur.js"></script>
+    </head>
+    <body>
+    <div id="all">
+        <h2>INFORMATION ABOUT EMPOYEE</h1>
+        <form id="formular">
+            <fieldset class="field1">
+                <legend>personal informations</legend>
+                <label for="FirstName">First Name : </label>
+                <input type="text" id="FirstName" name="FirstName" ><br/><br/>
+                <label for="LastName">Last Name : </label>
+                <input type="text" id="LastName" name="LastName" ><br/><br/>
+                <label for="NoId">No. identification : </label>
+                <input type="text" id="NoId" name="NoId" ><br/><br/>
+            </fieldset>
+            <p></p>
+            <fieldset class="field2">
+                <legend>Information about salary</legend>
+                <label for="salary">Print the salary : </label>
+                <input type="text" id="salary" name="salary" value="0" ><br/><br/>
+                <label for="NbrOfChild">Print the number of children : </label>
+                <input type="text" id="NbrOfChild" name="NbrOfChild" value="0" ><br/><br/>
+                <input type="button" value="calcul" onclick="salar();">
+
+                <p>After all operations</p>
+
+                <label for="ipts">IPTS : </label>
+                <input type="text" id="ipts" name="ipts"><br/><br/>
+                <label for="EmpAss">Employee Assurance : </label>
+                <input type="text" id="empass" name="EmpAss"><br/><br/>
+                <label for="regim">Regime pension : </label>
+                <input type="text" id="regim" name="regim"><br/><br/>
+                <label for="vps">VPS : </label>
+                <input type="text" id="vps" name="vps"><br/><br/><br/>
+                <label for="netsalary">Net salary : </label>
+                <input type="text" id="netsalary" name="netsalary" ><br/><br/><br/>
+            </feildset>
+            <div id="two_buttons">
+                <!--If the informations on the formular is right for you, click SEND or RESET.<br/>-->
+                <button id="send_form" value="SEND">SEND</button>
+                <button id="reset_form" value="RESET">CANCEL</button>
+            </div>
+        </form>
+    </div>
+    </body>
+</html>
